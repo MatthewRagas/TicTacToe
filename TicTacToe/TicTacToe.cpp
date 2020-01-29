@@ -3,22 +3,35 @@
 
 #include "pch.h"
 #include <iostream>
+#include "Point2D.h"
 using namespace std;
 
-void draw()
+const char* const RED = "\x1b[91m";
+const char* const BLUE = "\x1b[94m";
+const char* const RESET_COLOR = "\x1b[0m";
+
+void drawMap()
 {
 	// y  x
-	char map[3][3] = { {' ',' ',' ',},{' ',' ',' '},{' ',' ',' '} };
-	cout << "[ " << map[0][0] << " ][ " << map[0][1] << " ][ " << map[0][2] << " ]" << endl;
-	cout << "[ " << map[1][0] << " ][ " << map[1][1] << " ][ " << map[1][2] << " ]" << endl;
-	cout << "[ " << map[2][0] << " ][ " << map[2][1] << " ][ " << map[2][2] << " ]" << endl;
+	Point2D position = { 0, 0 };
+
+	//reset draw colors
+	cout << RESET_COLOR;
+	for (position.y = 0; position.y < 3; position.y++)
+	{
+		for (position.x = 0; position.x < 3; position.x++)
+		{
+			m_map[position.y][position.x].draw();
+		}
+		cout << endl;
+	}
 }
 
 int main()
 {
-	draw();
+	drawMap();
 
-	int input;     
+	int input;
 	std::cin >> input ;
 }
 
