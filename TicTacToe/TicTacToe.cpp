@@ -10,7 +10,120 @@ const char* const RED = "\x1b[91m";
 const char* const BLUE = "\x1b[94m";
 const char* const YELLOW = "\x1b[93m";
 const char* const RESET_COLOR = "\x1b[0m";
-const char* const INDENT = "\t";
+
+bool gameCheck(bool gameOver, char board[][3], bool player)
+{
+	//check win condition horizontally
+	if (!gameOver)
+	{
+		for (int x = 1; x < 2; x++)
+		{
+			for (int y = 0; y < 3; y++)
+			{
+				if (board[y][x - 1] == board[y][x] && board[y][x] == board[y][x + 1])
+				{
+					gameOver = true;
+					if (player && gameOver)
+					{
+						cout << RESET_COLOR << "Player" << BLUE << " O " << RESET_COLOR << "wins!";
+						cin.get();
+						break;
+					}
+					else if (!player && gameOver)
+					{
+						cout << RESET_COLOR << "Player" << RED << " X " << RESET_COLOR << "wins!";
+						cin.get();
+						break;
+					}
+				}
+				else
+				{
+					gameOver = false;
+				}
+			}
+		}
+	}
+	
+	//check win condition vertically
+	if (!gameOver)
+	{
+		for (int y = 1; y < 2; y++)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				if (board[y - 1][x] == board[y][x] && board[y][x] == board[y + 1][x])
+				{
+					gameOver = true;
+					if (player && gameOver)
+					{
+						cout << RESET_COLOR << "Player" << BLUE << " O " << RESET_COLOR << "wins!";
+						cin.get();
+						break;
+					}
+					else if (!player && gameOver)
+					{
+						cout << RESET_COLOR << "Player" << RED << " X " << RESET_COLOR << "wins!";
+						cin.get();
+						break;
+					}
+				}
+				else
+				{
+					gameOver = false;
+				}
+			}
+		}
+	}
+	
+	//check win condition diagonally
+	if (!gameOver)
+	{
+		for (int x = 1; x < 2; x++)
+		{
+			for (int y = 1; y < 2; y++)
+			{
+				if (board[y - 1][x - 1] == board[y][x] && board[y][x] == board[y + 1][x + 1])
+				{
+					gameOver = true;
+					if (player && gameOver)
+					{
+						cout << RESET_COLOR << "Player" << BLUE << " O " << RESET_COLOR << "wins!";
+						cin.get();
+						break;
+					}
+					else if (!player && gameOver)
+					{
+						cout << RESET_COLOR << "Player" << RED << " X " << RESET_COLOR << "wins!";
+						cin.get();
+						break;
+					}
+				}
+				else if (board[y - 1][x + 1] == board[y][x] && board[y][x] == board[y + 1][x - 1])
+				{
+					gameOver = true;
+					if (player && gameOver)
+					{
+						cout << RESET_COLOR << "Player " << BLUE << "O" << RESET_COLOR << " wins!";
+						cin.get();
+						break;
+					}
+					else if (!player && gameOver)
+					{
+						cout << RESET_COLOR << "Player " << RED << "X" << RESET_COLOR << " wins!";
+						cin.get();
+						break;
+					}
+				}
+				else
+				{
+					gameOver = false;
+				}
+			}
+		}
+	}
+	
+	return gameOver;
+}
 
 int main()
 {
@@ -18,8 +131,11 @@ int main()
 
 	int boardWidth = 3;
 	int boardHeight = 3;
+
+	//used to count how many player turns there have been
+	int playerTurns = 0;
 	// y  x	
-	char board[3][3] = { {'1','2','3',},{'4','5','6'},{'7','8','9'} };	
+	char board[][3] = { {'1','2','3',},{'4','5','6'},{'7','8','9'} };	
 
 	//variable used to switch between playerX and playerO
 	bool player = true;
@@ -34,7 +150,7 @@ int main()
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin.get();
 
-	while (!gameOver)
+	while (!gameOver && playerTurns < 9)
 	{
 		system("cls");
 
@@ -60,11 +176,13 @@ int main()
 			}
 		}		
 
+		gameOver = gameCheck(gameOver, board, player);
+		
 		//conditions to switch player turns
-		if (player)
+		if (player && !gameOver)
 		{
-
-			cout << "Player 'X', select a point in the grid: ";
+			cout << endl;
+			cout << RESET_COLOR << "Player " << RED << "X" << RESET_COLOR << ", select a point in the grid: ";
 
 			//clears input from previous input
 			cin.clear();
@@ -82,6 +200,7 @@ int main()
 
 					//changes player to playerO
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -95,6 +214,7 @@ int main()
 				{
 					board[0][1] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -107,6 +227,7 @@ int main()
 				{
 					board[0][2] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -119,6 +240,7 @@ int main()
 				{
 					board[1][0] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -131,6 +253,7 @@ int main()
 				{
 					board[1][1] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -143,6 +266,7 @@ int main()
 				{
 					board[1][2] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -155,6 +279,7 @@ int main()
 				{
 					board[2][0] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -167,6 +292,7 @@ int main()
 				{
 					board[2][1] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -179,6 +305,7 @@ int main()
 				{
 					board[2][2] = 'X';
 					player = false;
+					playerTurns++;
 				}
 				else
 				{
@@ -189,9 +316,10 @@ int main()
 			}
 				
 		}
-		else
+		else if(!gameOver)
 		{
-			cout << "Player 'O', select a point in the grid: ";
+			cout << endl;
+			cout << RESET_COLOR << "Player "<< BLUE << "O" << RESET_COLOR<< ", select a point in the grid: ";
 
 			//clears input from previous input
 			cin.clear();
@@ -208,6 +336,7 @@ int main()
 					board[0][0] = 'O';
 					//changes player to playerX
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -221,6 +350,7 @@ int main()
 				{
 					board[0][1] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -233,6 +363,7 @@ int main()
 				{
 					board[0][2] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -245,6 +376,7 @@ int main()
 				{
 					board[1][0] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -257,6 +389,7 @@ int main()
 				{
 					board[1][1] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -269,6 +402,7 @@ int main()
 				{
 					board[1][2] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -281,6 +415,7 @@ int main()
 				{
 					board[2][0] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -293,6 +428,7 @@ int main()
 				{
 					board[2][1] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -305,6 +441,7 @@ int main()
 				{
 					board[2][2] = 'O';
 					player = true;
+					playerTurns++;
 				}
 				else
 				{
@@ -314,8 +451,14 @@ int main()
 				break;					
 			}
 		}
+		
 	}
-
+	if (!gameOver)
+	{
+		cout << endl;
+		cout << "Cat Scracth!";
+	}
+	system("pause");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
